@@ -1,5 +1,4 @@
-# MyWebSerber
-my site's sourcecode
+# MyWebSever
 どうもこんにちは。
 これは私が作ったwebサイトのソースコードです。
 今もこのサイトはXserver上で動いているため、いつでも見ることができます。
