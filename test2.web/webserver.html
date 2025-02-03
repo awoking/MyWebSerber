@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+    
+    
+    <head>
+        <meta charset="utf-8">
+        <title>MyWebServerLab</title>
+        <meta name="description" content="とにかくいろいろしてみる私の実験鯖">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link href="https://fonts.googleapis.com/css?family=philosopher" rel="stylesheet">   
+        <link href="style.css" rel="stylesheet">  
+        <link rel="icon" type="image/icon" href="images/favicon(3).ico">   
+    </head>
+
+    
+    <body>
+        <div id="news" class="big-bg">  
+            <header class="page-header wrapper">
+                <h1><a href="index.html"><img class="logo" src="images/logo.png" alt="MyWebServerLabホーム"></a></h1>
+                <nav>
+                    <ul class="main-nav">
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="article.html">article</a></li>
+                        <li><a href="aboutme.html">about me</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="wrapper">
+                <h2 class="page-title">article</h2>
+            </div><!-- /.wrapper -->
+        </div><!-- /#home -->
+        
+        
+        <div class="news-contents wrapper">
+            <article>
+                <header class="post-info">
+                    <h2 class="post-title">自宅でWebサーバー立ててみた。</h2>
+                    <p class="post-date">1/31 <span>2025</span></p>
+                    <p class="post-cat">webサーバー</p>
+                </header>
+                <p>
+                    最近、自宅でWebサーバーを立ててみたので、その過程をまとめておく。<br>
+                    興味がある人はぜひ参考にしてほしい。<br>
+                </p>
+                <img src="images/t430.jpg" alt="自宅鯖一号">
+                
+                <br><br><h2>1. 準備したもの</h2>
+                <ul>
+                    <li><strong>ハードウェア:</strong> 余っていたPC（Lubuntuをインストール）</li>
+                    <li><strong>ソフトウェア:</strong> Apache</li>
+                    <li><strong>ネットワーク環境:</strong> 固定IPなしのため、Dynamic DNS（DDNS）を利用</li>
+                    <li><strong>ルーター:</strong> ポートフォワーディング設定が可能なもの（いわゆるポート開放）</li>
+                </ul><br><br>
+                
+                <h2>2. OSのセットアップ</h2>
+                <p>まずは、サーバーとして使うPCにLubuntuをインストール。</p>
+                <pre><code>$ sudo apt update && sudo apt upgrade -y</code></pre><br><br>
+                
+                <h2>3. Webサーバーのインストール</h2>
+                <p>WebサーバーはApacheとNginxのどちらも選択肢としてあるが、今回は情報の多い<strong>Apache</strong>を採用。</p>
+                <pre><code>$ sudo apt install apache2</code></pre>
+                <p>Apacheのサービスを有効化し、起動。</p>
+                <pre><code>$ sudo systemctl enable apache2</code></pre>
+                <pre><code>$ sudo systemctl start apache2 </code></pre>
+                <p>インストール後、ブラウザで http://サーバーのローカルIP にアクセスして動作確認。</p><br><br>
+
+                <h2>4. ドメイン設定と外部公開</h2>
+                <p>
+                    自宅のIPアドレスは変動するため、<strong>Dynamic DNS（DDNS）</strong> を利用。<br>
+                    無料のDDNSサービスに登録し、ルーターに設定。<br>
+                    また、外部からアクセスできるようにルーターのポートフォワーディングで<br>
+                    80番(http)・22番(ssh)を開放。
+                </p> 
+                <p><strong>の前に</strong>セキュリティ対策としてファイアーウォールを設定。</p>
+                <pre><code>$ sudo apt install ufw</code></pre>  
+                <pre><code>$ sudo ufw enable</code></pre>
+                <p>そしたらポート開放。</p><br><br>
+
+                <h2>5. html,cssファイル設置</h2>
+                <p>
+                    ここまでで一応サーバーは公開されている。<br>
+                    下記のディレクトリにファイルを設置することで任意のホームページを表示できる。
+                </p>
+                <pre><code>cd /var/www/html/</code></pre><br><br>
+
+                <h2>6. まとめ</h2>
+                <p>
+                    無事、自宅でWebサーバーを立てて運用開始。<br>
+                    最初は設定が大変だったが、一度構築してしまえば意外と簡単。<br>
+                    今後はssh証明書の取得やセキュリティ対策を万全にして大規模化させていきたい。
+                </p>
+                <p><strong>感想:</strong> 「やってみると意外と楽しい！」</p>
+                <p><strong>当時のサイト:</strong><a href="test.html" target="_blank">この度自宅webサーバーを開設しました。</a><br>
+                <strong>参考にした記事:</strong><a href="https://qiita.com/m-m-mame/items/a8ca30058e7a2a9a24f1" target="_blank">Ubuntu、Apacheを用いて自宅webサーバー構築</a><br>
+                <strong>参考にした書籍:</strong><a href="https://www.amazon.co.jp/1%E5%86%8A%E3%81%A7%E3%81%99%E3%81%B9%E3%81%A6%E8%BA%AB%E3%81%AB%E3%81%A4%E3%81%8FHTML-CSS%E3%81%A8Web%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E5%85%A5%E9%96%80%E8%AC%9B%E5%BA%A7%EF%BC%BB%E7%AC%AC2%E7%89%88%EF%BC%BD-%EF%BC%91%E5%86%8A%E3%81%A7%E3%81%99%E3%81%B9%E3%81%A6%E8%BA%AB%E3%81%AB%E3%81%A4%E3%81%8F-Mana/dp/4815618461/ref=pd_bxgy_d_sccl_1/355-2797341-6932905?pd_rd_w=Iez4V&content-id=amzn1.sym.58d37ee4-2fe1-49f7-95b0-fd56ffef2f4e&pf_rd_p=58d37ee4-2fe1-49f7-95b0-fd56ffef2f4e&pf_rd_r=FHMGPT8X18MHY3FV9NB1&pd_rd_wg=mpT5D&pd_rd_r=f08e9c52-f9fe-4ccd-9ac1-7955b839286f&pd_rd_i=4815618461&psc=1" target="_blank">1冊ですべて身につくHTML & CSSとWebデザイン入門講座［第2版］</a></p>
+                <p>これから自宅サーバーを立てる人の参考になれば嬉しい。</p>    
+
+
+                
+
+                    
+
+               
+
+
+
+
+
+
+
+
+            </article>
+            
+            <aside>
+                <h3 class="sub-title">記事一覧</h3>
+                <ul class="sub-menu">
+                    <li><a href="webserver.html">webサーバー</a></li>
+                    <li><a href="HPC.html">HPCクラスタ</a></li>
+                    <li><a href="other.html">他のさまざまな活動</a></li>
+                </ul>
+
+                <h3 class="sub-title">このサイトについて</h3>
+                <p>
+                    私が気になったこと、やってみたことについて
+                    いろいろレポートしてます！他の記事もどうぞ！
+                </p>
+            </aside>
+        </div><!-- /.news-contents -->
+        <div class="next"><a href="HPC.html">NEXT　「HPCクラスタ」　>></a></div>
+    
+    </body>
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2025 </small></p>
+        </div>
+    </footer>
+
+</html>    
