@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+    
+    
+    <head>
+        <meta charset="utf-8">
+        <title>MyWebServerLab</title>
+        <meta name="description" content="とにかくいろいろしてみる私の実験鯖">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link href="https://fonts.googleapis.com/css?family=philosopher" rel="stylesheet">   
+        <link href="style.css" rel="stylesheet">  
+        <link rel="icon" type="image/icon" href="images/favicon(3).ico">   
+    </head>
+
+    
+    <body>
+        <div id="news" class="big-bg">  
+            <header class="page-header wrapper">
+                <h1><a href="index.html"><img class="logo" src="images/logo.png" alt="MyWebServerLabホーム"></a></h1>
+                <nav>
+                    <ul class="main-nav">
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="article.html">article</a></li>
+                        <li><a href="aboutme.html">about me</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="wrapper">
+                <h2 class="page-title">article</h2>
+            </div><!-- /.wrapper -->
+        </div><!-- /#home -->
+        
+        
+        <div class="news-contents wrapper">
+            <article>
+                <header class="post-info">
+                    <h2 class="post-title">HPCクラスタ（笑）作ってみた。</h2>
+                    <p class="post-date">1/31 <span>2025</span></p>
+                    <p class="post-cat">HPCクラスタ</p>
+                </header>
+                <p>
+                    HPCクラスタってかっこいい。<br>
+                    そんな感じで始めたHPCクラスタ（笑）。<br>
+                    その過程をまとめておく。<br>
+                    興味がある人はぜひ参考にしてほしい。
+                </p><br><br>
+                
+                <h2>1. クラスタの概要</h2>
+                <p>本ガイドでは、Ubuntuを使用したHPCクラスタの構築方法を説明します。クラスタは、マスターノードと複数のスレーブノードで構成されます。</p><br><br>
+                
+                <h2>2. 必要なハードウェア・ソフトウェア</h2>
+                <ul>
+                    <li>マスターノード: 1台 (管理・ジョブスケジューラ・NFSサーバー)</li>
+                    <li>スレーブノード: 複数台 (計算専用ノード)</li>
+                    <li>OS: Ubuntu Server LTS</li>
+                    <li>並列計算: OpenMPI</li>
+                    <li>共有ストレージ: NFS</li>
+                    <li>ジョブスケジューラ: Slurm</li>
+                </ul><br><br>
+
+                <h2>3. ネットワーク・SSH設定</h2>
+                <h3>ネットワーク設定</h3>
+                <p>固定IPアドレスを設定します。</p>
+                <pre><code>$ sudo nano /etc/netplan/00-installer-config.yaml</code></pre>
+                <p>設定例 (マスターノード):</p>
+                <pre><code>
+                network:
+                ethernets:  <br>
+                eth0: <br>
+                dhcp4: no <br>
+                addresses: <br>
+                    - 192.168.1.1/24 <br>
+                gateway4: 192.168.1.254 <br>
+                nameservers: <br>
+                    addresses: [8.8.8.8, 8.8.4.4] <br>
+                version: 2</code></pre>
+                <p>設定を適用:</p>
+                <pre><code>$ sudo netplan apply</code></pre>
+                
+                <h3>SSHの設定</h3>
+                <p>パスワードなしログインを設定:</p>
+                <pre><code>$ ssh-keygen -t rsa </code></pre>
+                <pre><code>$ ssh-copy-id user@slave1 </code></pre>
+                <pre><code>$ ssh-copy-id user@slave2</code></pre><br><br>
+
+                <h2>4. NFSによるストレージ共有</h2>
+    
+                <h3>NFSサーバーのインストール</h3>
+                <pre><code>$ sudo apt install -y nfs-kernel-server</code></pre>
+                
+                <h3>共有ディレクトリの作成</h3>
+                <pre><code>$ sudo mkdir -p /mnt/nfs/shared </code></pre>
+                <pre><code>$ sudo chown nobody:nogroup /mnt/nfs/shared </code></pre>
+                <pre><code>$ sudo chmod 777 /mnt/nfs/shared</code></pre>
+                
+                <h3>設定ファイルの編集</h3>
+                <pre><code>$ sudo nano /etc/exports</code></pre>
+                <p>追加する内容:</p>
+                <pre><code>/mnt/nfs/shared 192.168.1.0/24(rw,sync,no_subtree_check)</code></pre>
+                
+                <h3>設定を反映</h3>
+                <pre><code>$ sudo exportfs -a </code></pre>
+                <pre><code>$ sudo systemctl restart nfs-kernel-server</code></pre><br><br>
+
+                <h2>5. OpenMPIとSlurmのセットアップ</h2>
+    
+                <h3>OpenMPIのインストール</h3>
+                <pre><code>$ sudo apt install -y openmpi-bin openmpi-common openmpi-doc libopenmpi-dev</code></pre>
+                
+                <h3>Slurmのインストール</h3>
+                <pre><code>$ sudo apt install -y slurm-wlm</code></pre>
+                
+                <h3>Slurm設定ファイルの編集</h3>
+                <pre><code>$ sudo nano /etc/slurm/slurm.conf</code></pre>
+                <p>設定例:</p>
+                <pre><code>
+                ClusterName=mycluster <br>
+                ControlMachine=master <br>
+            
+                NodeName=slave1 CPUs=4 State=UNKNOWN <br>
+                NodeName=slave2 CPUs=4 State=UNKNOWN <br>
+            
+                PartitionName=default Nodes=slave1,slave2 Default=YES MaxTime=INFINITE State=UP</code></pre>
+                
+                <h3>Slurmの起動</h3>
+                <pre><code>$ sudo systemctl enable slurmctld </code></pre>
+                <pre><code>$ sudo systemctl start slurmctld </code></pre>
+                <pre><code>$ sudo systemctl enable slurmd </code></pre>
+                <pre><code>$ sudo systemctl start slurmd </code></pre>
+                <br><br>
+
+                <h2>6. まとめ</h2>
+                <p>以上でHPCクラスタの基本的な構築が完了しました。<br>
+                    各ノードの動作を確認し、並列計算環境を楽しんでください。<br>
+                    そのうち、私のC言語記述のレベルが上がったらプログラムの書き方も書こうかと思います。
+                </p><br><br>
+
+                <h2>7. 参考資料</h2>
+                <p>以下のサイトや書籍を参考にしました。</p>
+                <ul>
+                    <li><a href="https://www.open-mpi.org/">OpenMPI 公式サイト</a></li>
+                    <li><a href="https://slurm.schedmd.com/">Slurm 公式サイト</a></li>
+                    <li><a href="https://help.ubuntu.com/">Ubuntu 公式ドキュメント</a></li>
+                    <li>自作PCクラスタ超入門 (書籍)</li>
+                </ul>
+                    
+
+
+
+
+                
+            </article>
+            
+            <aside>
+                <h3 class="sub-title">記事一覧</h3>
+                <ul class="sub-menu">
+                    <li><a href="webserver.html">webサーバー</a></li>
+                    <li><a href="HPC.html">HPCクラスタ</a></li>
+                    <li><a href="other.html">他のさまざまな活動</a></li>
+                </ul>
+
+                <h3 class="sub-title">このサイトについて</h3>
+                <p>
+                    私が気になったこと、やってみたことについて
+                    いろいろレポートしてます！他の記事もどうぞ！
+                </p>
+            </aside>
+        </div><!-- /.news-contents -->
+        <div class="next"><a href="other.html">NEXT　「他のさまざまな活動」　>></a></div>
+    </body>
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2025 </small></p>
+        </div>
+    </footer>
+
+</html>    
