@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+    
+    
+    <head>
+        <meta charset="utf-8">
+        <title>MyWebServerLab</title>
+        <meta name="description" content="とにかくいろいろしてみる私の実験鯖">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link href="https://fonts.googleapis.com/css?family=philosopher" rel="stylesheet">   
+        <link href="style.css" rel="stylesheet">  
+        <link rel="icon" type="image/icon" href="images/favicon(3).ico">   
+    </head>
+
+    
+    <body>
+        <div id="news" class="big-bg">  
+            <header class="page-header wrapper">
+                <h1><a href="index.html"><img class="logo" src="images/logo.png" alt="MyWebServerLabホーム"></a></h1>
+                <nav>
+                    <ul class="main-nav">
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="article.html">article</a></li>
+                        <li><a href="aboutme.html">about me</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <div class="wrapper">
+                <h2 class="page-title">Report</h2>
+            </div><!-- /.wrapper -->
+        </div><!-- /#home -->
+        
+        
+        <div class="news-contents wrapper">
+            <article>
+                <header class="post-info">
+                    <h2 class="post-title">他のさまざまな活動</h2>
+                    <p class="post-date">1/31 <span>2025</span></p>
+                    <p class="post-cat">番外編</p>
+                </header>
+                <p>
+                    こんにちは。鯖主です。<br>
+                    このページでは私が常日頃どんなことをしているのか、そーゆーことをお見せしようかと。<br>
+                    とは言っても、<br>
+                    三年分をここで一度に全部見せるのはきついのでハイライトとして<br>
+                    特に面白いところをつまんでお見せします。<br>
+                </p>
+                <p><br>一枚目</p>
+                <img src="images/bag.jpg" alt="ランドセルPC">
+                <p>
+                    一枚目はやっぱりこれですね。<br>
+                    これは普通のPCは触り飽きて、それまでの集大成として作ったランドセルPCです。<br>
+                    ランドセルの中はとても狭かったので普通の規格では入らなかったのがきつかったですね。<br>
+                    背面にアクリル板を加工したものを使って、<br>
+                    そこにMini-ITXのマザーボードとSFXの電源を載せています。<br>
+                    実はこのPC、グラフィックカードも載せていて、<br>
+                    よく見たら分かるんですけど、前面ポケットから生えてるケーブルはDPケーブルで<br>
+                    中にはライザーケーブルでマザーとつながったQuadroK600というグラフィックカードが入ってるんですよね～。<br>
+                    アクリル板のカットには苦労したのもいい思い出ですね。<br>
+                </p>
+                <p><br><br>二枚目</p>
+                <img src="images/brain.jpg" alt="BRAINUX">
+                <p>
+                    二枚目はBRAINUXです。<br>
+                    BRAINUXってのはSHARPの電子辞書brainにLinuxを入れるっていう<br>
+                    有志の方が開発した高度な遊びです。<br>
+                    たまたまその時はLinuxがマイブームだったのでやってみました。<br>
+                    brainという機体自体にはメモリが512MBしかないんですが、<br>
+                    配布されてるdebianベースのLinuxを入れると結構動く。<br>
+                    しっかり画像のようにshellでコマンドも打てるし、<br>
+                    LANからUSBへの変換アダプタがあればインターネットサーフィンもできるそうです。<br>
+                    （写真が淡いのは水没した後にアルコール付けにしたスマホで撮影したからです。）<br>
+                </p>
+                <p><br><br>三枚目</p>
+                <img src="images/saba.jpg" alt="めちゃくちゃ鯖">
+                <p>
+                    三枚目はヤフオクで買ったラックマウント型サーバーです。<br>
+                    ノリと勢いで買ったのはよいものの、<br>
+                    HDDがSASだったり、メモリがECCだったりと、<br>
+                    動かすまでなかなか大変でした。<br>
+                    この画像では無理やり普通の電源ユニット使ってSATAのSSDをインスコして、Windows10を動かそうとしてます。<br>
+                    今は動かしてませんがそのうち、これを使って何かできたらと。<br>
+                </p>
+
+                <p><br><br><br><br>
+                    以上が三年間のハイライトになります。<br>
+                    ここにない思い出もたくさんありますが、<br>
+                    どの経験も今の自分を形作る大切なものですね。<br>
+                    そんな感じ番外編は以上です。<br>
+                    他の記事も良ければどうぞ！<br>
+                </p>
+                
+            </article>
+            
+            <aside>
+                <h3 class="sub-title">レポート一覧</h3>
+                <ul class="sub-menu">
+                    <li><a href="webserver.html">webサーバー</a></li>
+                    <li><a href="HPC.html">HPCクラスタ</a></li>
+                    <li><a href="other.html">他のさまざまな活動</a></li>
+                </ul>
+
+                <h3 class="sub-title">このサイトについて</h3>
+                <p>
+                    私が気になったこと、やってみたことについて
+                    いろいろレポートしてます！他の記事もどうぞ！
+                </p>
+            </aside>
+        </div><!-- /.news-contents -->
+        <div class="next"><a href="webserver.html">NEXT　「webサーバー」　>></a></div>
+    </body>
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2025 </small></p>
+        </div>
+    </footer>
+
+</html>    
